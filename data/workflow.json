@@ -17,7 +17,9 @@
           "prompt_name": "Stakeholder Analysis",
           "file": "stakeholder_analysis.json",
           "artifact": "Stakeholder Analysis Workbook",
-          "depends_on": ["P1.1"],
+          "depends_on": [
+            "P1.1"
+          ],
           "sign_off_gate": false
         },
         {
@@ -25,15 +27,20 @@
           "prompt_name": "Scope Statement",
           "file": "scope_statement.json",
           "artifact": "Scope Statement & Exclusions Log",
-          "depends_on": ["P1.1"],
+          "depends_on": [
+            "P1.1"
+          ],
           "sign_off_gate": false
         },
         {
           "prompt_id": "P1.4",
-          "prompt_name": "Objectives & Success Criteria",
-          "file": "objectives_success_criteria.json",
-          "artifact": "Objectives Log & Success Criteria",
-          "depends_on": ["P1.1", "P1.3"],
+          "prompt_name": "Objectives & Benefits",
+          "file": "objectives_benefits.json",
+          "artifact": "Objectives & Benefits Baseline",
+          "depends_on": [
+            "P1.1",
+            "P1.3"
+          ],
           "sign_off_gate": false
         },
         {
@@ -41,7 +48,12 @@
           "prompt_name": "Engagement Charter",
           "file": "engagement_charter.json",
           "artifact": "Engagement Charter",
-          "depends_on": ["P1.1", "P1.2", "P1.3", "P1.4"],
+          "depends_on": [
+            "P1.1",
+            "P1.2",
+            "P1.3",
+            "P1.4"
+          ],
           "sign_off_gate": true
         },
         {
@@ -49,7 +61,10 @@
           "prompt_name": "Governance Framework",
           "file": "governance_framework.json",
           "artifact": "Governance Framework",
-          "depends_on": ["P1.5", "P1.2"],
+          "depends_on": [
+            "P1.5",
+            "P1.2"
+          ],
           "sign_off_gate": false
         }
       ]
@@ -63,7 +78,10 @@
           "prompt_name": "Work Breakdown Structure",
           "file": "work_breakdown_structure.json",
           "artifact": "Work Breakdown Structure (WBS)",
-          "depends_on": ["P1.3", "P1.4"],
+          "depends_on": [
+            "P1.3",
+            "P1.4"
+          ],
           "sign_off_gate": false
         },
         {
@@ -71,7 +89,10 @@
           "prompt_name": "Schedule & Milestones",
           "file": "schedule_milestones.json",
           "artifact": "Milestone Plan & Project Schedule",
-          "depends_on": ["P2.1", "P1.5"],
+          "depends_on": [
+            "P2.1",
+            "P1.5"
+          ],
           "sign_off_gate": false
         },
         {
@@ -79,7 +100,10 @@
           "prompt_name": "Critical Path",
           "file": "critical_path.json",
           "artifact": "Critical Path Analysis",
-          "depends_on": ["P2.1", "P2.2"],
+          "depends_on": [
+            "P2.1",
+            "P2.2"
+          ],
           "sign_off_gate": false
         },
         {
@@ -87,7 +111,10 @@
           "prompt_name": "Resource Plan",
           "file": "resource_plan.json",
           "artifact": "Resource Loading Table",
-          "depends_on": ["P2.1", "P2.2"],
+          "depends_on": [
+            "P2.1",
+            "P2.2"
+          ],
           "sign_off_gate": false
         },
         {
@@ -95,7 +122,11 @@
           "prompt_name": "RACI Matrix",
           "file": "raci_matrix.json",
           "artifact": "RACI Matrix",
-          "depends_on": ["P2.1", "P1.2", "P2.4"],
+          "depends_on": [
+            "P2.1",
+            "P1.2",
+            "P2.4"
+          ],
           "sign_off_gate": false
         },
         {
@@ -103,7 +134,10 @@
           "prompt_name": "Budget & Cost Baseline",
           "file": "budget_cost_baseline.json",
           "artifact": "Budget Baseline & Cost Tracker",
-          "depends_on": ["P2.4", "P1.5"],
+          "depends_on": [
+            "P2.4",
+            "P1.5"
+          ],
           "sign_off_gate": false
         },
         {
@@ -111,7 +145,11 @@
           "prompt_name": "Risk Register",
           "file": "risk_register.json",
           "artifact": "Risk Register",
-          "depends_on": ["P1.1", "P2.1", "P2.2"],
+          "depends_on": [
+            "P1.1",
+            "P2.1",
+            "P2.2"
+          ],
           "sign_off_gate": false
         },
         {
@@ -119,7 +157,10 @@
           "prompt_name": "Issue & Dependency Log",
           "file": "issue_dependency_log.json",
           "artifact": "Issue Log & Dependency Register",
-          "depends_on": ["P2.7", "P2.1"],
+          "depends_on": [
+            "P2.7",
+            "P2.1"
+          ],
           "sign_off_gate": false
         },
         {
@@ -127,7 +168,10 @@
           "prompt_name": "Communications Plan",
           "file": "communications_plan.json",
           "artifact": "Communications Matrix",
-          "depends_on": ["P1.2", "P1.6"],
+          "depends_on": [
+            "P1.2",
+            "P1.6"
+          ],
           "sign_off_gate": false
         },
         {
@@ -135,7 +179,11 @@
           "prompt_name": "Status Reporting Template",
           "file": "status_reporting_template.json",
           "artifact": "Status Report Template",
-          "depends_on": ["P2.9", "P1.6", "P2.2"],
+          "depends_on": [
+            "P2.9",
+            "P1.6",
+            "P2.2"
+          ],
           "sign_off_gate": false
         },
         {
@@ -143,7 +191,11 @@
           "prompt_name": "Quality Plan",
           "file": "quality_plan.json",
           "artifact": "Quality Plan & Deliverable Review Schedule",
-          "depends_on": ["P2.1", "P2.2", "P2.5"],
+          "depends_on": [
+            "P2.1",
+            "P2.2",
+            "P2.5"
+          ],
           "sign_off_gate": false
         },
         {
@@ -151,7 +203,11 @@
           "prompt_name": "Change Control Plan",
           "file": "change_control_plan.json",
           "artifact": "Change Control Plan & Change Request Template",
-          "depends_on": ["P1.3", "P1.6", "P2.6"],
+          "depends_on": [
+            "P1.3",
+            "P1.6",
+            "P2.6"
+          ],
           "sign_off_gate": false
         },
         {
@@ -159,7 +215,20 @@
           "prompt_name": "PMO Playbook",
           "file": "pmo_playbook.json",
           "artifact": "PMO Playbook",
-          "depends_on": ["P2.1", "P2.2", "P2.3", "P2.4", "P2.5", "P2.6", "P2.7", "P2.8", "P2.9", "P2.10", "P2.11", "P2.12"],
+          "depends_on": [
+            "P2.1",
+            "P2.2",
+            "P2.3",
+            "P2.4",
+            "P2.5",
+            "P2.6",
+            "P2.7",
+            "P2.8",
+            "P2.9",
+            "P2.10",
+            "P2.11",
+            "P2.12"
+          ],
           "sign_off_gate": true
         }
       ]

@@ -81,7 +81,7 @@ If 8 or more fields are populated, proceed to Step 1 below.
 
 EXCEL_RATIONALISATIONS = {
 
-    'objectives_success_criteria.json': """\
+    'objectives_benefits.json': """\
 WORKBOOK RATIONALISATION — generate a maximum of 4 sheets:
 1. Objectives & Success Criteria Register — the primary data sheet combining \
 objectives, KPIs, and success criteria in one table with columns for Objective, \
