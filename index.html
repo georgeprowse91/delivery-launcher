@@ -440,7 +440,15 @@
     .field-label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
     label.field-label { font-size: 11px; font-weight: 500; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
     label.field-label .required { color: var(--orange500); margin-left: 2px; }
+    .field-label.error-label { color: #c62828; }
     .field-hint { font-size: 11px; font-weight: 400; color: var(--secondaryText); margin: 2px 0 6px; line-height: 1.4; }
+    .field-error {
+      display: none;
+      margin-top: 6px;
+      font-size: 11px;
+      color: #c62828;
+    }
+    .field.has-error .field-error { display: block; }
 
     input[type="text"], input[type="date"], select, textarea {
       width: 100%; padding: 7px 10px;
@@ -454,6 +462,13 @@
     input:focus, select:focus, textarea:focus {
       outline: none; border-color: var(--orange500);
       box-shadow: 0 0 0 2px rgba(253,81,8,0.07);
+    }
+    .field.has-error input[type="text"],
+    .field.has-error input[type="date"],
+    .field.has-error select,
+    .field.has-error textarea {
+      border-color: #c62828;
+      box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.08);
     }
     select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23B5BCC4' d='M5 7L0 2h10z'/%3E%3C/svg%3E");
@@ -1000,12 +1015,14 @@
     <div class="field-group">
       <div class="field-row">
         <div class="field">
-          <label class="field-label">Client Name </label>
+          <label class="field-label">Client Name <span class="required">*</span></label>
           <input type="text" id="clientName" placeholder="Enter client name">
+          <div class="field-error" id="clientNameError">Client name is required.</div>
         </div>
         <div class="field">
-          <label class="field-label">Engagement Name </label>
+          <label class="field-label">Engagement Name <span class="required">*</span></label>
           <input type="text" id="engagementName" placeholder="Enter engagement name">
+          <div class="field-error" id="engagementNameError">Engagement name is required.</div>
         </div>
       </div>
       <div class="field-row">
@@ -1296,6 +1313,15 @@ function updateFormProgress() {
     Object.entries(INLINED_DATA).forEach(([key, val]) => appData[key] = val);
     document.getElementById('dataError').innerHTML = '';
     renderAll();
+    ['clientName', 'engagementName'].forEach(function(fieldId) {
+      const field = document.getElementById(fieldId);
+      if (!field) return;
+      field.addEventListener('input', function() {
+        if ((field.value || '').trim()) {
+          setFieldError(fieldId, '');
+        }
+      });
+    });
   }
 
   // ── RENDER ALL SECTIONS ──
@@ -1734,9 +1760,54 @@ function toggleDescriptionEdit(descId) {
   }
 
   // ── WORKFLOW ──
+  function setFieldError(fieldId, message) {
+    const input = document.getElementById(fieldId);
+    if (!input || !input.closest) return;
+    const field = input.closest('.field');
+    const label = field ? field.querySelector('.field-label') : null;
+    const errorEl = document.getElementById(`${fieldId}Error`);
+    const hasError = Boolean(message);
+    if (field) field.classList.toggle('has-error', hasError);
+    if (label) label.classList.toggle('error-label', hasError);
+    if (errorEl) errorEl.textContent = message || '';
+  }
+
+  function validateRequiredFields() {
+    const required = [
+      { id: 'clientName', name: 'Client name' },
+      { id: 'engagementName', name: 'Engagement name' }
+    ];
+    let firstInvalid = null;
+    let hasErrors = false;
+
+    required.forEach(function(field) {
+      const el = document.getElementById(field.id);
+      const value = (el && el.value ? el.value.trim() : '');
+      if (!value) {
+        hasErrors = true;
+        if (!firstInvalid) firstInvalid = el;
+        setFieldError(field.id, `${field.name} is required.`);
+      } else {
+        setFieldError(field.id, '');
+      }
+    });
+
+    if (firstInvalid && typeof firstInvalid.focus === 'function') {
+      firstInvalid.focus();
+    }
+
+    if (hasErrors) {
+      alert('Please complete all required fields before starting the workflow.');
+    }
+    return !hasErrors;
+  }
+
   function startWorkflow() {
     if (!appData || Object.keys(appData).length === 0) {
       alert('Data files are still loading. Please wait a moment and try again.');
+      return;
+    }
+    if (!validateRequiredFields()) {
       return;
     }
     formData = compileForm();
@@ -1855,15 +1926,45 @@ function toggleDescriptionEdit(descId) {
   }
 
   // ── BUILD PROMPT TEXT ──
-  function buildPromptText(prompt, promptJson, data) {
-  if (prompt.prompt_id === 'P1.1') {
-    const briefJson = JSON.stringify(data, null, 2);
-    const instruction = promptJson.instruction || '[Instruction not found in prompt file]';
-    return instruction.replace('{{ENGAGEMENT_DATA}}', briefJson);
+  function buildPromptContext(data) {
+    const context = {
+      engagement_context: data.engagement_context || {},
+      industry: data.industry || {},
+      objectives: (data.objectives || []).slice(0, 3),
+      service_offerings: (data.service_offerings || []).slice(0, 5).map(function(domain) {
+        return {
+          domain: domain.domain,
+          selected_building_blocks: (domain.selected_building_blocks || []).slice(0, 5).map(function(block) {
+            return block.building_block;
+          })
+        };
+      }),
+      key_risks: (data.risk_profile || []).slice(0, 3).map(function(risk) {
+        return {
+          industry_group: risk.industry_group,
+          risk_type: risk.risk_type
+        };
+      }),
+      key_regulations: (data.regulatory_profile || []).slice(0, 5)
+    };
+    return JSON.stringify(context, null, 2);
   }
-  const instruction = promptJson.instruction || '[Instruction not found in prompt file]';
-  return instruction;
-}
+
+  function buildPromptText(prompt, promptJson, data) {
+    const instruction = promptJson.instruction || '[Instruction not found in prompt file]';
+    const briefJson = JSON.stringify(data, null, 2);
+    if (instruction.includes('{{ENGAGEMENT_DATA}}')) {
+      return instruction.replace('{{ENGAGEMENT_DATA}}', briefJson);
+    }
+
+    const compactContext = buildPromptContext(data);
+    return `${instruction}
+
+---
+
+ENGAGEMENT CONTEXT SNAPSHOT
+${compactContext}`;
+  }
 
   // ── WORKFLOW CONTROLS ──
   function toggleCard(id) {

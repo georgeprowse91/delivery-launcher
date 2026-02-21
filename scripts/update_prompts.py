@@ -11,10 +11,11 @@ Changes applied:
 """
 
 import json
-import os
+from pathlib import Path
 import sys
 
-PROMPTS_DIR = '/home/user/delivery-launcher/prompts'
+REPO_ROOT = Path(__file__).resolve().parents[1]
+PROMPTS_DIR = REPO_ROOT / 'prompts'
 
 # Files that require NO changes (first step / already updated by agent)
 SKIP_FILES = {
@@ -565,8 +566,8 @@ def insert_after_step3(inst, insert_text):
 # ── Main processing loop ──────────────────────────────────────────────────────
 
 def process_file(fname):
-    path = os.path.join(PROMPTS_DIR, fname)
-    with open(path, 'r') as fh:
+    path = PROMPTS_DIR / fname
+    with path.open('r', encoding='utf-8') as fh:
         data = json.load(fh)
 
     inst = data['instruction']
@@ -637,7 +638,7 @@ def process_file(fname):
 
     if changed:
         data['instruction'] = inst
-        with open(path, 'w') as fh:
+        with path.open('w', encoding='utf-8') as fh:
             json.dump(data, fh, indent=2, ensure_ascii=False)
         print(f'  UPDATED: {fname}')
     else:
@@ -647,7 +648,11 @@ def process_file(fname):
 
 
 def main():
-    files = sorted(f for f in os.listdir(PROMPTS_DIR) if f.endswith('.json'))
+    if not PROMPTS_DIR.exists():
+        print(f'ERROR: prompts directory not found: {PROMPTS_DIR}')
+        sys.exit(1)
+
+    files = sorted(path.name for path in PROMPTS_DIR.glob('*.json'))
     updated = 0
     skipped = 0
     for fname in files:
