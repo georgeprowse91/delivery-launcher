@@ -15,6 +15,7 @@ Then open `http://localhost:8000`.
 ## Repository layout
 
 - `index.html`: UI, styles, workflow rendering logic, and inlined data/prompts.
+- `index-standalone.html`: second standalone entry file with all `data/` and `prompts/` JSON embedded for direct `file://` usage.
 - `data/`: source JSON data used to build inlined payloads.
 - `prompts/`: prompt templates by workflow step.
 - `scripts/update_prompts.py`: maintenance script for bulk prompt updates.
